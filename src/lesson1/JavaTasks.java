@@ -2,6 +2,11 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.*;
+import java.util.*;
+
+import static lesson1.Sorts.mergeSort;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -98,8 +103,39 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    static public void sortTemperatures(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortTemperatures(String inputName, String outputName) throws Exception{
+        // T = O(n log n)
+        // R = O(n)
+
+        BufferedReader buff = new BufferedReader(new FileReader(inputName));
+
+        int size = 0;
+        String line;
+        ArrayList<Integer> listTemp = new ArrayList<>();
+
+        while ((line = buff.readLine()) != null){
+            size++;
+            int currentTemp = (int) (Double.parseDouble(line) * 10.0);
+            if (currentTemp < -2730 || currentTemp > 5000) throw new Exception("Incorrect values");
+            listTemp.add(currentTemp);
+        }
+
+        int[] temp = new int[size];
+
+        for (int i = 0; i < size; i++) temp[i] = listTemp.get(i);
+
+        mergeSort(temp);
+
+        BufferedWriter res = new BufferedWriter(new FileWriter(outputName));
+
+        for (int i = 0; i < size; i++) {
+            res.write(Double.toString((double) temp[i] / 10.0));
+            res.newLine();
+        }
+
+        buff.close();
+        res.close();
+
     }
 
     /**
@@ -131,8 +167,50 @@ public class JavaTasks {
      * 2
      * 2
      */
-    static public void sortSequence(String inputName, String outputName) {
-        throw new NotImplementedError();
+    static public void sortSequence(String inputName, String outputName) throws IOException {
+        // T = O(n)
+        // R = O(n)
+
+        BufferedReader buff = new BufferedReader(new FileReader(inputName));
+        String line;
+        int maxSequence = 0;
+        int minInt = Integer.MAX_VALUE;
+
+        HashMap<Integer, Integer> sequenceMap = new HashMap<>();
+
+        while ((line = buff.readLine()) != null){
+            int currentInt = Integer.parseInt(line);
+            int count = sequenceMap.getOrDefault(currentInt, 0);
+            count++;
+            sequenceMap.put(currentInt, count);
+            if (maxSequence == count) {
+                if (minInt > currentInt) minInt = currentInt;
+            }
+            else if (maxSequence < count) {
+                maxSequence = count;
+                minInt = currentInt;
+            }
+        }
+
+        buff = new BufferedReader(new FileReader(inputName));
+        BufferedWriter res = new BufferedWriter(new FileWriter(outputName));
+
+        while ((line = buff.readLine()) != null){
+            int currentInt = Integer.parseInt(line);
+            if (currentInt != minInt) {
+                res.write(line);
+                res.newLine();
+            }
+        }
+
+        for (int i = 0; i < maxSequence; i++) {
+            res.write(String.valueOf(minInt));
+            res.newLine();
+        }
+
+        buff.close();
+        res.close();
+
     }
 
     /**

@@ -3,6 +3,8 @@ package lesson2;
 import kotlin.NotImplementedError;
 import kotlin.Pair;
 
+import static java.lang.StrictMath.sqrt;
+
 @SuppressWarnings("unused")
 public class JavaAlgorithms {
     /**
@@ -97,8 +99,33 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+    static public String longestCommonSubstring(String first, String second){
+        // T = O(n*m)
+        // R = O(n+m)
+        // n - length of first string, m - length of second string;
+
+        StringBuilder common = new StringBuilder();
+        int maxLength = 0;
+        int maxCommonRowEnds = 0;
+        int lengthFirst = first.length();
+        int lengthSecond = second.length();
+        int[][] matrix = new int[lengthFirst][lengthSecond];
+        char[] column = first.toCharArray();
+        char[] row = second.toCharArray();
+        for (int i = 0; i < lengthFirst; i++) {
+            for (int j = 0; j < lengthSecond; j++) {
+                if (column[i] == row[j]) {
+                    if (i == 0 || j == 0) matrix[i][j] = 1;
+                    else matrix[i][j] = matrix[i-1][j-1] + 1;
+                    if (maxLength < matrix[i][j]) {
+                        maxLength = matrix[i][j];
+                        maxCommonRowEnds = j;
+                    }
+                }
+            }
+        }
+        for (int l = maxCommonRowEnds - maxLength +1 ; l < maxCommonRowEnds +1; l++) common.append(row[l]);
+        return common.toString();
     }
 
     /**
@@ -111,7 +138,25 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
-    static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+    static public int calcPrimesNumber(int limit){
+        // T = O(n sqtr(n))
+        // R = O(n)
+
+        int count = 0;
+        if (limit < 2) return count;
+        for (int i = 1; i <= limit; i++) {
+            if (i == 2) count++;
+            if ((i > 2) && (i % 2 != 0)){
+                boolean prime = true;
+                for (int j = 3; j <= (int) sqrt(i) ; j = j + 2) {
+                    if(i % j == 0) {
+                        prime = false;
+                        break;
+                    }
+                }
+                if (prime) count++;
+            }
+        }
+        return count;
     }
 }
