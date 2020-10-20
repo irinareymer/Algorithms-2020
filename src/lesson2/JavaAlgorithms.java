@@ -101,7 +101,7 @@ public class JavaAlgorithms {
      */
     static public String longestCommonSubstring(String first, String second){
         // T = O(n*m)
-        // R = O(n+m)
+        // R = O(n*m)
         // n - length of first string, m - length of second string;
 
         StringBuilder common = new StringBuilder();
@@ -139,7 +139,7 @@ public class JavaAlgorithms {
      * Единица простым числом не считается.
      */
     static public int calcPrimesNumber(int limit){
-        // T = O(n sqtr(n))
+        // T = O(n sqrt(n))
         // R = O(n)
 
         int count = 0;

@@ -5,7 +5,7 @@ import kotlin.NotImplementedError;
 import java.io.*;
 import java.util.*;
 
-import static lesson1.Sorts.mergeSort;
+import static lesson1.Sorts.quickSort;
 
 @SuppressWarnings("unused")
 public class JavaTasks {
@@ -111,7 +111,7 @@ public class JavaTasks {
 
         int size = 0;
         String line;
-        ArrayList<Integer> listTemp = new ArrayList<>();
+        List<Integer> listTemp = new ArrayList<>();
 
         while ((line = buff.readLine()) != null){
             size++;
@@ -124,7 +124,7 @@ public class JavaTasks {
 
         for (int i = 0; i < size; i++) temp[i] = listTemp.get(i);
 
-        mergeSort(temp);
+        quickSort(temp);
 
         BufferedWriter res = new BufferedWriter(new FileWriter(outputName));
 
@@ -176,7 +176,7 @@ public class JavaTasks {
         int maxSequence = 0;
         int minInt = Integer.MAX_VALUE;
 
-        HashMap<Integer, Integer> sequenceMap = new HashMap<>();
+        Map<Integer, Integer> sequenceMap = new HashMap<>();
 
         while ((line = buff.readLine()) != null){
             int currentInt = Integer.parseInt(line);

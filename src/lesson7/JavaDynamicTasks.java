@@ -2,6 +2,7 @@ package lesson7;
 
 import kotlin.NotImplementedError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -19,7 +20,42 @@ public class JavaDynamicTasks {
      * При сравнении подстрок, регистр символов *имеет* значение.
      */
     public static String longestCommonSubSequence(String first, String second) {
-        throw new NotImplementedError();
+        // T = O(n*m)
+        // R = O(n*m)
+        // n - length of the first string, m - length of the second string;
+        boolean match = false;
+
+        StringBuilder sequence = new StringBuilder();
+        int lengthFirst = first.length();
+        int lengthSecond = second.length();
+        int[][] matrix = new int[lengthFirst+1][lengthSecond+1];
+        char[] column = first.toCharArray();
+        char[] row = second.toCharArray();
+
+        for (int i = lengthFirst-1; i >= 0 ; i--) {
+            for (int j = lengthSecond-1; j >= 0; j--) {
+                if (column[i] == row[j]) {
+                    match = true;
+                    matrix[i][j] = matrix[i+1][j+1] + 1;
+                }
+                else matrix[i][j] = Math.max(matrix[i+1][j], matrix[i][j+1]);
+            }
+        }
+        if (!match) return "";
+
+        int i = 0;
+        int j = 0;
+        while (i < lengthFirst && j < lengthSecond){
+            if (column[i] == row[j]){
+                sequence.append(column[i]);
+                i++;
+                j++;
+            }
+            else if (matrix[i+1][j] > matrix[i][j+1]) i++;
+            else j++;
+        }
+
+        return sequence.toString();
     }
 
     /**
@@ -35,7 +71,57 @@ public class JavaDynamicTasks {
      * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
      */
     public static List<Integer> longestIncreasingSubSequence(List<Integer> list) {
-        throw new NotImplementedError();
+        // T = O(n^2)
+        // R = O(n)
+        // n - size of the list;
+
+        int listSize = list.size();
+        if (listSize <= 1) return list;
+
+        List<Integer> result = new ArrayList<>();
+        int[] index = new int[listSize];
+        int maxLen = 0;
+        int maxInd = 0;
+
+        for (int i = 0; i < listSize; i++) {
+            index[i] = 1;
+            int current = list.get(i);
+            for (int j = 0; j < i; j++) {
+                int prev = list.get(j);
+                if (prev < current) {
+                    index[i] = Math.max(index[i], index[j] + 1);
+                    if (maxLen < index[i]) {
+                        maxLen = index[i];
+                        maxInd = i;
+                    }
+                }
+            }
+        }
+
+        if (maxInd == 0) {
+            result.add(list.get(0));
+            return result;
+        }
+        for (int i = 0; i < maxLen ; i++) result.add(0);
+
+        int prev = list.get(maxInd) + 1;
+        for (int i = maxInd; i >= 0 ; i--) {
+            int current = list.get(i);
+            if (index[i] == maxLen){
+               if (current < prev) {
+                   result.set(maxLen - 1, current);
+                   if (i != 0 && index[i - 1] < maxLen){
+                       prev = current;
+                       maxLen--;
+                   }
+               }
+               else {
+                   prev = result.get(index[i]);
+                   maxLen--;
+               }
+            }
+        }
+        return result;
     }
 
     /**
