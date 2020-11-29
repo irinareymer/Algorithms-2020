@@ -1,6 +1,7 @@
 package lesson6
 
 import lesson6.impl.GraphBuilder
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -258,8 +259,20 @@ abstract class AbstractGraphTests {
             setOf(cross["A"], cross["B"], cross["C"], cross["D"]),
             cross.largestIndependentVertexSet()
         )
+        val cyclicGraph = GraphBuilder().apply {
+            val a = addVertex("A")
+            val b = addVertex("B")
+            val c = addVertex("C")
+            val d = addVertex("D")
+            addConnection(a, b)
+            addConnection(b, c)
+            addConnection(c, d)
+            addConnection(d, a)
+        }.build()
+        assertThrows<IllegalArgumentException> { cyclicGraph.largestIndependentVertexSet(); }
     }
 
+    // считаю, что тесты достаточны
     fun longestSimplePath(longestSimplePath: Graph.() -> Path) {
         val emptyGraph = GraphBuilder().build()
         assertEquals(0, emptyGraph.longestSimplePath().length)
